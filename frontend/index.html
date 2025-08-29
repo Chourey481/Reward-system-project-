@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Reward System Frontend</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; background: #f7f7f7; }
+        h1 { margin: 30px 0 10px 0; text-align: center; }
+        .container { max-width: 420px; margin: 30px auto; background: #fff; border-radius: 8px; box-shadow: 0 2px 8px #0001; padding: 30px 30px 20px 30px; }
+        .step { display: none; }
+        .step.active { display: block; }
+        label { font-weight: bold; margin-top: 10px; display: block; }
+        input, button { padding: 8px; margin: 5px 0 15px 0; width: 100%; box-sizing: border-box; border-radius: 4px; border: 1px solid #ccc; }
+        button { background: #1976d2; color: #fff; border: none; font-weight: bold; cursor: pointer; transition: background 0.2s; }
+        button:hover { background: #125ea2; }
+        .msg { padding: 8px; border-radius: 4px; margin-bottom: 10px; font-size: 0.98em; }
+        .msg.success { background: #e6f9e6; color: #207520; border: 1px solid #b2e2b2; }
+        .msg.error { background: #ffeaea; color: #b30000; border: 1px solid #ffb2b2; }
+        .dashboard-section { border: 1px solid #eee; border-radius: 6px; padding: 18px 15px 10px 15px; margin-bottom: 18px; background: #fafcff; }
+        .dashboard-section h3 { margin-top: 0; }
+        .logout-btn { background: #b30000; margin-top: 10px; }
+        .logout-btn:hover { background: #7a0000; }
+    </style>
+</head>
+<body>
+    <h1>Reward System</h1>
+    <div class="container">
+        <!-- Step 1: Register -->
+        <div class="step" id="step-register">
+            <h2>Step 1: Register</h2>
+            <label for="regMobile">Mobile Number</label>
+            <input type="text" id="regMobile" placeholder="Enter mobile number">
+            <label for="regName">Name</label>
+            <input type="text" id="regName" placeholder="Enter name">
+            <label for="regPassword">Password</label>
+            <input type="password" id="regPassword" placeholder="Enter password">
+            <button onclick="registerMember()">Register</button>
+            <div id="registerMsg"></div>
+            <div style="text-align:right"><button onclick="showStep('step-login')" style="background:#888;">Already have an account?</button></div>
+        </div>
+        <!-- Step 2: Verify -->
+        <div class="step" id="step-verify">
+            <h2>Step 2: Verify OTP</h2>
+            <label for="verMobile">Mobile Number</label>
+            <input type="text" id="verMobile" placeholder="Enter mobile number">
+            <label for="verOtp">OTP</label>
+            <input type="text" id="verOtp" placeholder="Enter OTP (1234)">
+            <button onclick="verifyMember()">Verify</button>
+            <div id="verifyMsg"></div>
+            <div style="text-align:right"><button onclick="showStep('step-login')" style="background:#888;">Already verified?</button></div>
+        </div>
+        <!-- Step 3: Login -->
+        <div class="step" id="step-login">
+            <h2>Step 3: Login</h2>
+            <label for="logMobile">Mobile Number</label>
+            <input type="text" id="logMobile" placeholder="Enter mobile number">
+            <label for="logPassword">Password</label>
+            <input type="password" id="logPassword" placeholder="Enter password">
+            <button onclick="loginMember()">Login</button>
+            <div id="loginMsg"></div>
+            <div style="text-align:right"><button onclick="showStep('step-register')" style="background:#888;">New user?</button></div>
+        </div>
+        <!-- Step 4: Dashboard -->
+        <div class="step" id="step-dashboard">
+            <h2>Dashboard</h2>
+            <div id="dashboardWelcome" style="margin-bottom:10px;"></div>
+            <div class="dashboard-section">
+                <h3>Add Points</h3>
+                <label for="addAmount">Purchase Amount (₹)</label>
+                <input type="number" id="addAmount" placeholder="e.g. 250">
+                <button onclick="addPoints()">Add Points</button>
+                <div id="addPointsMsg"></div>
+            </div>
+            <div class="dashboard-section">
+                <h3>Get Points</h3>
+                <button onclick="getPoints()">Get My Points</button>
+                <div id="getPointsMsg"></div>
+            </div>
+            <div class="dashboard-section">
+                <h3>Redeem Coupon</h3>
+                <label for="redeemPoints">Points to Redeem (500 or 1000)</label>
+                <input type="number" id="redeemPoints" placeholder="500 or 1000">
+                <button onclick="redeemCoupon()">Redeem</button>
+                <div id="redeemMsg"></div>
+            </div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+    <script>
+    // --- State ---
+    let token = "";
+    let memberId = null;
+    let memberName = "";
+
+    // --- Step Navigation ---
+    function showStep(stepId) {
+        document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+        document.getElementById(stepId).classList.add('active');
+        clearMsgs();
+    }
+    function clearMsgs() {
+        ["registerMsg","verifyMsg","loginMsg","addPointsMsg","getPointsMsg","redeemMsg"].forEach(id => {
+            const el = document.getElementById(id);
+            if(el) el.innerHTML = "";
+        });
+    }
+    function showMsg(id, msg, type) {
+        const el = document.getElementById(id);
+        el.innerHTML = `<div class='msg ${type}'>${msg}</div>`;
+    }
+
+    // --- Register ---
+    async function registerMember() {
+        const mobile = document.getElementById('regMobile').value.trim();
+        const name = document.getElementById('regName').value.trim();
+        const password = document.getElementById('regPassword').value;
+        if(!mobile || !password) {
+            showMsg('registerMsg', 'Mobile number and password required.', 'error');
+            return;
+        }
+        const res = await fetch('http://localhost:5062/api/member/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobileNumber: mobile, name, password })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            showMsg('registerMsg', 'Registered! Please verify OTP (1234).', 'success');
+            setTimeout(() => { showStep('step-verify'); document.getElementById('verMobile').value = mobile; }, 1200);
+        } else {
+            showMsg('registerMsg', data || 'Registration failed.', 'error');
+        }
+    }
+
+    // --- Verify ---
+    async function verifyMember() {
+        const mobile = document.getElementById('verMobile').value.trim();
+        const otp = document.getElementById('verOtp').value.trim();
+        if(!mobile || !otp) {
+            showMsg('verifyMsg', 'Mobile number and OTP required.', 'error');
+            return;
+        }
+        const res = await fetch('http://localhost:5062/api/member/verify', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobileNumber: mobile, otp })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            showMsg('verifyMsg', 'Verified! You can now login.', 'success');
+            setTimeout(() => { showStep('step-login'); document.getElementById('logMobile').value = mobile; }, 1200);
+        } else {
+            showMsg('verifyMsg', data || 'Verification failed.', 'error');
+        }
+    }
+
+    // --- Login ---
+    async function loginMember() {
+        const mobile = document.getElementById('logMobile').value.trim();
+        const password = document.getElementById('logPassword').value;
+        if(!mobile || !password) {
+            showMsg('loginMsg', 'Mobile number and password required.', 'error');
+            return;
+        }
+        const res = await fetch('http://localhost:5062/api/member/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mobileNumber: mobile, password })
+        });
+        const data = await res.json();
+        if(res.ok && data.token) {
+            token = data.token;
+            memberId = data.memberId;
+            memberName = data.name;
+            showDashboard();
+        } else {
+            showMsg('loginMsg', data || 'Login failed.', 'error');
+        }
+    }
+
+    // --- Dashboard ---
+    function showDashboard() {
+        document.getElementById('dashboardWelcome').innerHTML = `<b>Welcome, ${memberName} (ID: ${memberId})</b>`;
+        showStep('step-dashboard');
+    }
+    function logout() {
+        token = ""; memberId = null; memberName = "";
+        showStep('step-login');
+    }
+
+    // --- Add Points ---
+    async function addPoints() {
+        const amount = parseInt(document.getElementById('addAmount').value);
+        if(!amount || amount < 100) {
+            showMsg('addPointsMsg', 'Enter a valid amount (min ₹100).', 'error');
+            return;
+        }
+        const res = await fetch('http://localhost:5062/api/points/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ memberId, purchaseAmount: amount })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            showMsg('addPointsMsg', `Points added: ${data.pointsAdded}. Total: ${data.totalPoints}`, 'success');
+        } else {
+            showMsg('addPointsMsg', data || 'Failed to add points.', 'error');
+        }
+    }
+
+    // --- Get Points ---
+    async function getPoints() {
+        const res = await fetch(`http://localhost:5062/api/points/${memberId}`, {
+            method: 'GET',
+            headers: { 'Authorization': 'Bearer ' + token }
+        });
+        const data = await res.json();
+        if(res.ok) {
+            showMsg('getPointsMsg', `Total Points: ${data.totalPoints}`, 'success');
+        } else {
+            showMsg('getPointsMsg', data || 'Failed to get points.', 'error');
+        }
+    }
+
+    // --- Redeem Coupon ---
+    async function redeemCoupon() {
+        const pts = parseInt(document.getElementById('redeemPoints').value);
+        if(pts !== 500 && pts !== 1000) {
+            showMsg('redeemMsg', 'You can only redeem 500 or 1000 points.', 'error');
+            return;
+        }
+        const res = await fetch('http://localhost:5062/api/coupons/redeem', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token
+            },
+            body: JSON.stringify({ memberId, pointsToRedeem: pts })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            showMsg('redeemMsg', `Coupon: <b>${data.code}</b> for ₹${data.amount}. Remaining: ${data.remainingPoints} points.`, 'success');
+        } else {
+            showMsg('redeemMsg', data || 'Failed to redeem.', 'error');
+        }
+    }
+
+    // --- Initial Step ---
+    showStep('step-register');
+    </script>
+</body>
+</html>
