@@ -1,0 +1,236 @@
+{
+	"info": {
+		"_postman_id": "116715c2-8614-4e13-8ff9-d82cf693a96f",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "47933332"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mobileNumber\": \"9827312782\",\r\n  \"name\": \"abcd\",\r\n  \"password\": \"12369\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5062/api/member/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"member",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mobileNumber\": \"9827312782\",\r\n  \"otp\": \"1234\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5062/api/member/verify",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"member",
+						"verify"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkiLCJtb2JpbGUiOiI5ODI3MzEyNzgyIiwiZXhwIjoxNzU2NDg2MjEyLCJpc3MiOiJSZXdhcmRTeXN0ZW1BUEkiLCJhdWQiOiJSZXdhcmRTeXN0ZW1DbGllbnQifQ.a6-ZMUsbWW__cxEt0esMTSO3uDWrFZVlegpvQcfWcNw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"memberId\": 9,\r\n  \"purchaseAmount\": 10000\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5062/api/points/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"points",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkiLCJtb2JpbGUiOiI5ODI3MzEyNzgyIiwiZXhwIjoxNzU2NDg2MjEyLCJpc3MiOiJSZXdhcmRTeXN0ZW1BUEkiLCJhdWQiOiJSZXdhcmRTeXN0ZW1DbGllbnQifQ.a6-ZMUsbWW__cxEt0esMTSO3uDWrFZVlegpvQcfWcNw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5062/api/points/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"points",
+						"9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkiLCJtb2JpbGUiOiI5ODI3MzEyNzgyIiwiZXhwIjoxNzU2NDg2MjEyLCJpc3MiOiJSZXdhcmRTeXN0ZW1BUEkiLCJhdWQiOiJSZXdhcmRTeXN0ZW1DbGllbnQifQ.a6-ZMUsbWW__cxEt0esMTSO3uDWrFZVlegpvQcfWcNw",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"memberId\": 9,\r\n  \"pointsToRedeem\": 500\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:5062/api/coupons/redeem",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"coupons",
+						"redeem"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjkiLCJtb2JpbGUiOiI5ODI3MzEyNzgyIiwiZXhwIjoxNzU2NDg2MjEyLCJpc3MiOiJSZXdhcmRTeXN0ZW1BUEkiLCJhdWQiOiJSZXdhcmRTeXN0ZW1DbGllbnQifQ.a6-ZMUsbWW__cxEt0esMTSO3uDWrFZVlegpvQcfWcNw",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:5062/api/points/9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5062",
+					"path": [
+						"api",
+						"points",
+						"9"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
