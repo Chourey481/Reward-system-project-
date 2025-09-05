@@ -131,5 +131,5 @@ Please open issues and submit pull requests for new features, bug fixes, or impr
 ## Acknowledgements
 
 - Built with .NET 8 and Entity Framework Core
-- Swagger for API documentation
+- Postman collection URL : https://.postman.co/workspace/My-Workspace~9aa3db63-ab6a-413a-8873-e7b054891f43/collection/47933332-116715c2-8614-4e13-8ff9-d82cf693a96f?action=share&creator=47933332
 - Pomelo EntityFrameworkCore MySQL provider
